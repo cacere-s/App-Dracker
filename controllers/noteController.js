@@ -132,7 +132,7 @@ const fixedNote = async (req, res) => {
 const searchNotes = async (req, res) => {
   const { search } = req.body;
 
-  if (!search.trim()) return res.json({ error: true, data: [] });
+  if (!search.trim()) return res.json({ error: true, data: null });
 
   const notes = await Note.findAll({
     raw: true,
@@ -148,7 +148,7 @@ const searchNotes = async (req, res) => {
     },
   });
 
-  console.log(notes);
+  return res.json({ error: false, data: notes });
 };
 
 export {
