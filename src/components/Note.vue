@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
     <!-- Navbar -->
-    <Navbar :search="searchNotes" :booleanSearch="search" :editNote="showNote" :showNote="noteDB" 
-    :fixedNote="fixedNote" :update="update"/>
+    <Navbar :search="searchNotes" :booleanSearch="search" :showNote="noteDB" 
+    :fixedNote="fixedNote"/>
 
     <!-- snackbar -->
     <v-snackbar v-model="snack.boolean" :color="snack.color" timeout="3000" vertical>
