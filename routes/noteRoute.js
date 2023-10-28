@@ -25,6 +25,6 @@ router.put('/fixed/:id', fixedNote);
 
 router.delete('/delete/:id', deleteNote)
 
-router.get('/search/note', searchNotes)
+router.post('/search/note', searchNotes)
 
 export default router;
