@@ -1,26 +1,26 @@
 <template>
   <v-container fluid>
     <!-- Navbar -->
-    <Navbar :search="searchNotes" />
+    <Navbar :search="searchNotes" :booleanSearch="search" :editNote="showNote" :showNote="noteDB" 
+    :fixedNote="fixedNote" :update="update"/>
 
     <!-- snackbar -->
     <v-snackbar v-model="snack.boolean" :color="snack.color" timeout="3000" vertical>
       <p class="text-h6">{{ snack.title }}</p>
       <p class="text-h6 text-subtitle-1">{{ snack.subtitle }} </p>
-    </v-snackbar>
+    </v-snackbar>    
 
-
-    <div class="d-flex mt-5 mb-4 mx-10" style="align-items: center;">
-      <h1 class="text-h2 font-weight-bold mr-10">Notes</h1>
+    <!-- Titulo de Notas -->
+    <div v-if="!search" class="d-flex mt-5 mb-4 mx-10" style="align-items: center;">
+      <h1 class="text-h2 font-weight-bold mr-10">Notas</h1>
       <div>
         <v-btn icon="mdi-plus" color="black" @click="create = !create"></v-btn>
         <v-tooltip activator="parent" location="bottom">Crear nota</v-tooltip>
       </div>
     </div>
 
-
-
-    <div class="my-5 mx-5 d-flex" style="flex-wrap: wrap;">
+    <!-- Notas -->
+    <div v-if="!search" class="my-5 mx-5 d-flex" style="flex-wrap: wrap; justify-content: center;">
 
       <!-- Notas fijas -->
       <v-card v-for="item in notesFixed" class="ma-5" height="300" width="285" :color="newColor()"
@@ -40,7 +40,6 @@
           <v-card-subtitle>{{ formatDate(item.createdAt) }}</v-card-subtitle>
           <v-btn icon="mdi-pencil" variant="plain" @click="showNote(item.id)"></v-btn>
         </div>
-
 
       </v-card>
 
@@ -86,7 +85,7 @@
             <v-card-title class="text-h5 font-weight-bold">Crear</v-card-title>
             <v-btn icon="mdi-close" variant="text" @click="close"></v-btn>
           </div>
-          <v-form @submit.prevent="createNote">
+          <v-form @submit.once="createNote">
 
             <v-text-field class="text-h4 pt-0 font-weight-bold mb-2" v-model="title.value.value"
               :error-messages="title.errorMessage.value" placeholder="Title" variant="underlined"></v-text-field>
@@ -170,6 +169,9 @@ const show = ref(false)
 const idNote = ref()
 const showNoteDB = ref({})
 
+const search = ref(false)
+const update = ref(false)
+
 const notes = ref(null)
 const notesFixed = ref(null)
 
@@ -200,6 +202,7 @@ const formatDate = (date) => {
 const close = () => {
   create.value = false
   edit.value = false
+  update.value = false
   handleReset()
 }
 
@@ -271,6 +274,7 @@ const editNote = handleSubmit(async value => {
     .then(async response => {
       const resDB = await response.json()
       snack.value = resDB
+      update.value = true
     })
     .catch(err => console.error(err))
     .finally(async () => {
@@ -313,8 +317,8 @@ const fixedNote = async (id) => {
     })
 }
 
-const searchNotes = (search) => {
-  console.log(search)
+const searchNotes = (boolean) => {
+  search.value = boolean
 }
 
 
